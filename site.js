@@ -1,191 +1,180 @@
 (() => {
-  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
-  const textNodes = [];
-  while (walker.nextNode()) textNodes.push(walker.currentNode);
-  textNodes.forEach((node) => {
-    node.nodeValue = node.nodeValue
-      .replace(/Stackly/g, 'IRONCORE')
-      .replace(/SSSSS/g, '★★★★★')
-      .replace(/\ba(?=\d)/g, '₹');
+  const missing = '404.html';
+
+  // Keep the required Stackly identity consistent, including legacy page markup.
+  document.querySelectorAll('.logo, .dash-brand').forEach((logo) => {
+    logo.href = /dashboard/.test(location.pathname) ? location.pathname : 'index.html';
+    logo.setAttribute('aria-label', 'Stackly home');
+    const image = document.createElement('img');
+    image.src = 'assets/logo-dark.webp';
+    image.alt = 'Stackly';
+    logo.replaceChildren(image);
   });
-  const supportSymbols = ['🏋', '◷', '✚', '♟'];
-  document.querySelectorAll('.benefits .symbol').forEach((symbol, index) => {
-    if (!symbol.textContent.trim() || symbol.textContent.trim() === '"') symbol.textContent = supportSymbols[index % supportSymbols.length];
+  document.querySelectorAll('title').forEach((title) => { title.textContent = title.textContent.replace(/IRONCORE/gi, 'Stackly'); });
+  document.querySelectorAll('body *:not(script):not(style)').forEach((el) => {
+    if (el.children.length === 0 && el.textContent) el.textContent = el.textContent.replace(/IRONCORE|IRONCORE GYM & HEALTH CLUB/gi, 'Stackly');
   });
 
-  const footer = document.querySelector('footer');
-  if (footer) {
-    const footerLogo = footer.querySelector('.logo');
-    if (footerLogo) {
-      footerLogo.style.backgroundImage = 'none';
-      footerLogo.style.width = '155px';
-      footerLogo.style.fontSize = '31px';
-      footerLogo.setAttribute('aria-label', 'IRONCORE home');
-    }
-
-    const socials = footer.querySelector('.socials');
-    if (socials) {
-      const icons = [['f', 'Facebook'], ['◎', 'Instagram'], ['𝕏', 'X'], ['▶', 'YouTube']];
-      socials.setAttribute('aria-label', 'Follow IRONCORE on social media');
-      socials.querySelectorAll('a').forEach((link, index) => {
-        const [icon, name] = icons[index];
-        link.textContent = icon;
-        link.href = '#';
-        link.title = `Follow us on ${name}`;
-        link.setAttribute('aria-label', `Follow us on ${name}`);
-        link.addEventListener('click', (event) => {
-          event.preventDefault();
-          notify(`${name} updates are coming soon.`);
-        });
-      });
-      if (!footer.querySelector('.footer-follow')) {
-        const label = document.createElement('p');
-        label.className = 'footer-follow';
-        label.textContent = 'Follow the club';
-        label.style.cssText = 'margin:18px 0 -10px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:#fff';
-        socials.before(label);
+  if (/user-dashboard|admin-dashboard/.test(location.pathname)) {
+    let email = '';
+    try { email = localStorage.getItem('stacklyLoginEmail') || ''; } catch {}
+    if (email) {
+      const username = email.split('@')[0];
+      const accountName = document.querySelector('.account b');
+      const greeting = document.querySelector('.heading h1');
+      const avatar = document.querySelector('.avatar');
+      if (accountName) accountName.textContent = email;
+      if (greeting && /user-dashboard/.test(location.pathname)) greeting.textContent = `Good morning, ${username}`;
+      if (avatar) {
+        const initials = username.split(/[._-]+/).filter(Boolean).slice(0, 2).map((part) => part[0].toUpperCase()).join('');
+        avatar.textContent = initials || username.slice(0, 2).toUpperCase();
       }
     }
+  }
 
-    const destinations = {
-      'Supplements': '#shop', 'Training Gear': '#shop', 'Activewear': '#shop', 'Recovery': 'services.html',
-      'Memberships': 'contact.html', 'Personal Training': 'services.html', 'Classes': 'services.html', 'Find a Location': 'contact.html',
-      'Contact Us': 'contact.html', 'Shipping & Returns': '#shop', 'FAQ': 'contact.html',
-      'About Us': 'about.html', 'Services': 'services.html', 'Blog': 'blog.html'
-    };
+  if (/^\/$|index|about|services|blog|contact/.test(location.pathname)) {
+    const footer = document.querySelector('body > footer');
+    if (footer) footer.innerHTML = `
+      <div class="wrap footergrid">
+        <div class="footer-brand"><a class="logo" href="index.html" aria-label="Stackly home"><img src="assets/logo-dark.webp" alt="Stackly"></a>
+          <p>Move with purpose. Build strength. Feel your best.</p>
+          <div class="socials" aria-label="Stackly social media">
+            <a href="404.html" aria-label="Facebook" title="Facebook"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M13.5 21v-8h2.7l.4-3.1h-3.1v-2c0-.9.3-1.5 1.6-1.5h1.7V3.6c-.3 0-1.3-.1-2.5-.1-2.5 0-4.2 1.5-4.2 4.3v2.1H7.3V13h2.8v8z"/></svg></a>
+            <a href="404.html" aria-label="Instagram" title="Instagram"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.7" cy="6.7" r="1.2" fill="currentColor"/></svg></a>
+            <a href="404.html" aria-label="X" title="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4l16 16M20 4L4 20" fill="none" stroke="currentColor" stroke-width="2.4"/></svg></a>
+            <a href="404.html" aria-label="YouTube" title="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23 7.1a3 3 0 0 0-2.1-2.2C19 4.4 12 4.4 12 4.4s-7 0-8.9.5A3 3 0 0 0 1 7.1 31 31 0 0 0 .5 12a31 31 0 0 0 .5 4.9 3 3 0 0 0 2.1 2.2c1.9.5 8.9.5 8.9.5s7 0 8.9-.5a3 3 0 0 0 2.1-2.2 31 31 0 0 0 .5-4.9 31 31 0 0 0-.5-4.9ZM9.7 15.5v-7l6 3.5z"/></svg></a>
+          </div>
+        </div>
+        <div><h5>Shop</h5><ul><li><a href="404.html">Supplements</a></li><li><a href="404.html">Training Gear</a></li><li><a href="404.html">Activewear</a></li><li><a href="services.html">Recovery</a></li></ul></div>
+        <div><h5>The Club</h5><ul><li><a href="404.html">Memberships</a></li><li><a href="services.html">Personal Training</a></li><li><a href="services.html">Classes</a></li><li><a href="contact.html">Find a Location</a></li></ul></div>
+        <div><h5>Need help?</h5><ul><li><a href="contact.html">Contact Us</a></li><li><a href="404.html">Shipping &amp; Returns</a></li><li><a href="contact.html">FAQ</a></li><li><a href="tel:+919876543210">Call +91 98765 43210</a></li></ul></div>
+      </div><div class="wrap copyright">© 2026 STACKLY. ALL RIGHTS RESERVED.</div>`;
+  }
+
+  // Use one identical public header on the four information pages.
+  if (/about|services|blog|contact/.test(location.pathname)) {
+    const top = document.querySelector('body > .top');
+    const nav = document.querySelector('body > nav');
+    const wrap = nav?.querySelector('.wrap');
+    const logo = wrap?.querySelector('.logo')?.cloneNode(true);
+    if (top) top.innerHTML = '<div class="wrap"><span>WELCOME TO STACKLY</span><b>TRAIN WITH PURPOSE</b><span>+91 98765 43210</span></div>';
+    if (wrap && logo) {
+      const current = location.pathname.split('/').pop().replace('.html', '');
+      wrap.replaceChildren(logo);
+      const links = document.createElement('div');
+      links.className = 'links';
+      [['index.html', 'HOME'], ['about.html', 'ABOUT US'], ['services.html', 'SERVICES'], ['blog.html', 'BLOG'], ['contact.html', 'CONTACT']].forEach(([href, label]) => {
+        const link = document.createElement('a'); link.href = href; link.textContent = label;
+        if (href === `${current}.html`) link.className = 'active';
+        links.append(link);
+      });
+      const auth = document.createElement('div'); auth.className = 'auth';
+      auth.innerHTML = '<a class="login" href="login.html">LOGIN</a><a class="signup" href="signup.html">SIGN UP</a>';
+      wrap.append(links, auth);
+    }
+  }
+
+  // Inert placeholder links and controls all lead to the site's 404 page.
+  document.querySelectorAll('a[href="#"]').forEach((link) => { link.href = missing; });
+  document.querySelectorAll('.socials a, a[aria-label^="Facebook"], a[aria-label^="Instagram"], a[aria-label="X"], a[aria-label^="YouTube"]').forEach((link) => { link.href = missing; });
+  document.querySelectorAll('[data-dashboard-action], .quick').forEach((control) => {
+    if (control.tagName === 'A') control.href = missing;
+    else {
+      control.setAttribute('role', 'link');
+      control.setAttribute('tabindex', '0');
+      control.addEventListener('click', () => { location.href = missing; });
+      control.addEventListener('keydown', (event) => { if (event.key === 'Enter' || event.key === ' ') location.href = missing; });
+    }
+  });
+
+  // Supply the same Stackly social links and footer destinations on every page.
+  document.querySelectorAll('footer').forEach((footer) => {
+    if (!footer.querySelector('.logo')) {
+      const grid = document.createElement('div');
+      grid.className = 'wrap footergrid';
+      grid.innerHTML = '<div><a class="logo" href="index.html" aria-label="Stackly home"><img src="assets/logo-dark.webp" alt="Stackly"></a><p>Move with purpose. Build strength. Feel your best.</p></div><div><h4>Explore</h4><ul><li><a href="about.html">About Us</a></li><li><a href="services.html">Services</a></li><li><a href="blog.html">Blog</a></li></ul></div><div><h4>Visit</h4><ul><li><a href="contact.html">Contact Us</a></li><li><a href="404.html">Memberships</a></li></ul></div>';
+      footer.prepend(grid);
+    }
+    const destinations = { 'About Us': 'about.html', Services: 'services.html', Blog: 'blog.html', 'Contact Us': 'contact.html', 'Find a Club': 'contact.html', 'Memberships': '404.html', 'Personal Training': 'services.html', Classes: 'services.html', 'Supplements': '404.html', 'Training Gear': '404.html', Activewear: '404.html', Recovery: 'services.html', FAQ: 'contact.html', 'Shipping & Returns': '404.html' };
     footer.querySelectorAll('li').forEach((item) => {
+      if (item.querySelector('a')) return;
       const label = item.textContent.trim();
-      if (!destinations[label] || item.querySelector('a')) return;
-      const link = document.createElement('a');
-      link.href = destinations[label];
-      link.textContent = label;
+      const link = document.createElement('a'); link.href = destinations[label] || missing; link.textContent = label;
       item.replaceChildren(link);
     });
+    if (!footer.querySelector('.socials')) {
+      const links = document.createElement('div');
+      links.className = 'socials';
+      links.setAttribute('aria-label', 'Stackly social media');
+      links.innerHTML = '<a href="404.html" aria-label="Facebook">f</a><a href="404.html" aria-label="Instagram">◎</a><a href="404.html" aria-label="X">𝕏</a><a href="404.html" aria-label="YouTube">▶</a>';
+      footer.querySelector('.footergrid > div')?.append(links);
+    }
+  });
 
-    const email = footer.querySelector('.newsletter input');
-    if (email) {
-      email.type = 'email';
-      email.setAttribute('aria-label', 'Email address for club news');
-      email.addEventListener('keydown', (event) => {
-        if (event.key !== 'Enter') return;
-        event.preventDefault();
-        if (!email.checkValidity()) return email.reportValidity();
-        notify('You’re on the list — check your inbox for your member offer.');
-        email.value = '';
+  const imagePool = [
+    'assets/1518611012118-696072aa579a.webp',
+    'assets/1538805060514-97d9cc17730c.webp',
+    'assets/1571019614242-c5c5dee9f50b.webp',
+    'assets/1599058917212-d750089bc07e.webp'
+  ];
+  if (!/login|signup|404|dashboard/.test(location.pathname)) {
+    document.querySelectorAll('main .card:not(.admin-feature)').forEach((card, index) => {
+      if (index > 3 || card.querySelector('img')) return;
+      const image = document.createElement('img');
+      image.className = 'card-image';
+      image.src = imagePool[index % imagePool.length];
+      image.alt = 'Stackly training and wellness';
+      image.loading = 'lazy';
+      card.prepend(image);
+    });
+  } else if (/dashboard/.test(location.pathname)) {
+    const content = document.querySelector('.dash .content');
+    if (content) {
+      const gallery = document.createElement('section');
+      gallery.className = 'club-gallery';
+      gallery.innerHTML = '<div class="card-top"><h2>Inside Stackly</h2><a href="404.html">Explore the club</a></div><div class="club-gallery-grid"></div>';
+      imagePool.slice(0, 3).forEach((src) => {
+        const image = document.createElement('img'); image.src = src; image.alt = 'Stackly gym training space'; image.loading = 'lazy';
+        gallery.querySelector('.club-gallery-grid').append(image);
       });
-      const subscribe = footer.querySelector('.newsletter b');
-      if (subscribe) {
-        subscribe.textContent = '→';
-        subscribe.setAttribute('role', 'button');
-        subscribe.setAttribute('tabindex', '0');
-        subscribe.setAttribute('aria-label', 'Subscribe to club news');
-        const submitNewsletter = () => {
-          if (!email.checkValidity()) return email.reportValidity();
-          notify('You’re on the list — check your inbox for your member offer.');
-          email.value = '';
-        };
-        subscribe.addEventListener('click', submitNewsletter);
-        subscribe.addEventListener('keydown', (event) => {
-          if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); submitNewsletter(); }
-        });
-      }
+      content.append(gallery);
     }
   }
 
-  const notify = (message) => {
-    let toast = document.querySelector('.site-toast');
-    if (!toast) {
-      toast = document.createElement('div');
-      toast.className = 'site-toast';
-      toast.setAttribute('role', 'status');
-      toast.style.cssText = 'position:fixed;right:22px;bottom:22px;z-index:20;max-width:330px;background:#111;color:#fff;border-left:4px solid #cdfc3d;padding:14px 18px;font:13px sans-serif;box-shadow:0 12px 30px rgba(0,0,0,.22)';
-      document.body.append(toast);
+  // Reveal content as it enters the viewport, with a reduced-motion fallback.
+  const revealItems = document.querySelectorAll('main section, .hero, .hero-grid, .benefits, .split-promos, .dealbar, .dash-grid > *, .stats > *');
+  if ('IntersectionObserver' in window && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    const observer = new IntersectionObserver((entries, current) => entries.forEach((entry) => {
+      if (entry.isIntersecting) { entry.target.classList.add('is-visible'); current.unobserve(entry.target); }
+    }), { threshold: 0.12 });
+    revealItems.forEach((item) => { item.classList.add('reveal'); observer.observe(item); });
+  } else revealItems.forEach((item) => item.classList.add('is-visible'));
+
+  document.querySelectorAll('form').forEach((form) => form.addEventListener('submit', (event) => {
+    event.preventDefault();
+    if (!form.reportValidity()) return;
+    if (location.pathname.endsWith('login.html')) {
+      const role = form.querySelector('[name="role"]:checked')?.value || 'user';
+      const email = form.querySelector('input[type="email"]')?.value.trim().toLowerCase() || '';
+      try { if (email) localStorage.setItem('stacklyLoginEmail', email); } catch {}
+      location.href = role === 'admin' ? 'admin-dashboard.html' : 'user-dashboard.html';
     }
-    toast.textContent = message;
-    clearTimeout(notify.timer);
-    notify.timer = setTimeout(() => toast.remove(), 3500);
-  };
+    else { alert('Thanks! Your details have been received.'); form.reset(); }
+  }));
+  document.querySelectorAll('form button[type="button"]').forEach((button) => { button.type = 'submit'; });
 
-  const loginForm = location.pathname.endsWith('login.html') ? document.querySelector('form') : null;
-  if (loginForm && !loginForm.querySelector('[name="role"]')) {
-    const roles = document.createElement('fieldset');
-    roles.style.cssText = 'grid-column:span 2;border:0;padding:0;margin:0';
-    roles.innerHTML = '<legend style="font-size:12px;font-weight:700;margin-bottom:9px">Continue as</legend><div style="display:flex;gap:10px"><label style="border:1px solid #e3e7e0;padding:10px 12px;font-size:12px;cursor:pointer;flex:1"><input type="radio" name="role" value="user" checked> Member</label><label style="border:1px solid #e3e7e0;padding:10px 12px;font-size:12px;cursor:pointer;flex:1"><input type="radio" name="role" value="admin"> Administrator</label></div>';
-    loginForm.querySelector('input[type="password"]')?.after(roles);
-  }
-
-  const navigation = document.querySelector('nav .wrap');
-  const navLinks = navigation?.querySelector('.navlinks, .links');
-  if (navigation && navLinks && !navigation.querySelector('.mobile-nav-toggle')) {
-    const toggle = document.createElement('button');
-    toggle.className = 'mobile-nav-toggle';
-    toggle.type = 'button';
-    toggle.setAttribute('aria-label', 'Open navigation menu');
-    toggle.setAttribute('aria-expanded', 'false');
-    toggle.textContent = '☰';
-    toggle.style.cssText = 'display:none;margin-left:auto;width:42px;height:42px;border:1px solid #dce0da;background:#fff;font-size:21px;cursor:pointer';
-    navigation.append(toggle);
-    const compact = window.matchMedia(`(max-width: ${navLinks.classList.contains('navlinks') ? 950 : 760}px)`);
-    const renderMobileNav = () => {
-      if (!compact.matches) {
-        toggle.style.display = 'none';
-        navLinks.style.cssText = '';
-        navigation.style.height = '';
-        navigation.style.minHeight = '';
-        toggle.setAttribute('aria-expanded', 'false');
-        toggle.textContent = '☰';
-        return;
-      }
-      toggle.style.display = 'block';
-      navigation.style.height = 'auto';
-      navigation.style.minHeight = '76px';
-      if (toggle.getAttribute('aria-expanded') !== 'true') navLinks.style.display = 'none';
-    };
-    toggle.addEventListener('click', () => {
-      const open = toggle.getAttribute('aria-expanded') !== 'true';
-      toggle.setAttribute('aria-expanded', String(open));
-      toggle.setAttribute('aria-label', open ? 'Close navigation menu' : 'Open navigation menu');
-      toggle.textContent = open ? '×' : '☰';
-      navLinks.style.cssText = open ? 'display:flex;order:4;flex-basis:100%;flex-wrap:wrap;gap:0;padding:8px 0 2px' : 'display:none';
-      if (open) navLinks.querySelectorAll('a').forEach((link) => {
-        link.style.cssText = 'padding:12px 4px;flex:0 0 50%;font-size:12px';
-      });
+  const pageNav = document.querySelector('body > nav .wrap');
+  const pageLinks = pageNav?.querySelector('.links, .navlinks');
+  if (pageNav && pageLinks) {
+    const menu = document.createElement('button');
+    menu.className = 'site-menu-toggle'; menu.type = 'button'; menu.textContent = '☰';
+    menu.setAttribute('aria-label', 'Open navigation'); menu.setAttribute('aria-expanded', 'false');
+    pageNav.append(menu);
+    menu.addEventListener('click', () => {
+      const open = menu.getAttribute('aria-expanded') !== 'true';
+      menu.setAttribute('aria-expanded', String(open));
+      menu.setAttribute('aria-label', open ? 'Close navigation' : 'Open navigation');
+      pageLinks.classList.toggle('mobile-open', open);
     });
-    compact.addEventListener('change', renderMobileNav);
-    renderMobileNav();
-  }
-
-  document.querySelectorAll('form').forEach((form) => {
-    form.addEventListener('submit', (event) => {
-      event.preventDefault();
-      if (!form.reportValidity()) return;
-      if (form === loginForm) {
-        const role = form.querySelector('[name="role"]:checked')?.value || 'user';
-        window.location.href = role === 'admin' ? 'admin-dashboard.html' : 'user-dashboard.html';
-        return;
-      }
-      notify(form.closest('#contact-form') ? 'Thanks — your message has been received. We’ll be in touch soon.' : 'Thanks! Your details have been saved.');
-      form.reset();
-    });
-    form.querySelectorAll('button[type="button"]').forEach((button) => { button.type = 'submit'; });
-  });
-
-  document.querySelectorAll('.quick').forEach((button) => {
-    button.setAttribute('role', 'button'); button.setAttribute('tabindex', '0');
-    const add = () => notify('Added to your cart.');
-    button.addEventListener('click', add);
-    button.addEventListener('keydown', (event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); add(); } });
-  });
-
-  const search = document.querySelector('.search');
-  if (search) {
-    const runSearch = () => {
-      const query = search.querySelector('input').value.trim();
-      if (!query) return notify('Enter a product or service to search.');
-      document.querySelector('#shop')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      notify(`Showing popular results for “${query}”.`);
-    };
-    search.querySelector('button').addEventListener('click', runSearch);
-    search.querySelector('input').addEventListener('keydown', (event) => { if (event.key === 'Enter') runSearch(); });
   }
 })();
