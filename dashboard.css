@@ -21,3 +21,5 @@ html{scroll-behavior:smooth;scroll-padding-top:90px}.topnav{position:sticky;top:
 .dash-footer .socials svg{width:16px;height:16px}
 
 .account b{overflow-wrap:anywhere}.heading h1{overflow-wrap:anywhere}
+
+.card,.event,.notice,.support-detail{transition:transform .22s ease,box-shadow .22s ease,border-color .22s ease}@media(hover:hover){.card:hover,.event:hover,.notice:hover,.support-detail:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(20,30,40,.12);border-color:#b6e936}}@media(hover:none){.card:active,.event:active,.notice:active,.support-detail:active{transform:scale(.99)}}@media(prefers-reduced-motion:reduce){.card,.event,.notice,.support-detail{transition:none}}

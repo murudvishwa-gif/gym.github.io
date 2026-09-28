@@ -45,10 +45,10 @@
             <a href="404.html" aria-label="YouTube" title="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23 7.1a3 3 0 0 0-2.1-2.2C19 4.4 12 4.4 12 4.4s-7 0-8.9.5A3 3 0 0 0 1 7.1 31 31 0 0 0 .5 12a31 31 0 0 0 .5 4.9 3 3 0 0 0 2.1 2.2c1.9.5 8.9.5 8.9.5s7 0 8.9-.5a3 3 0 0 0 2.1-2.2 31 31 0 0 0 .5-4.9 31 31 0 0 0-.5-4.9ZM9.7 15.5v-7l6 3.5z"/></svg></a>
           </div>
         </div>
-        <div><h5>Shop</h5><ul><li><a href="404.html">Supplements</a></li><li><a href="404.html">Training Gear</a></li><li><a href="404.html">Activewear</a></li><li><a href="services.html">Recovery</a></li></ul></div>
+        <div><h5>Explore</h5><ul><li><a href="index.html">Home</a></li><li><a href="about.html">About Us</a></li><li><a href="services.html">Services</a></li><li><a href="blog.html">Blog</a></li><li><a href="contact.html">Contact</a></li></ul></div>
         <div><h5>The Club</h5><ul><li><a href="404.html">Memberships</a></li><li><a href="services.html">Personal Training</a></li><li><a href="services.html">Classes</a></li><li><a href="contact.html">Find a Location</a></li></ul></div>
         <div><h5>Need help?</h5><ul><li><a href="contact.html">Contact Us</a></li><li><a href="404.html">Shipping &amp; Returns</a></li><li><a href="contact.html">FAQ</a></li><li><a href="tel:+919876543210">Call +91 98765 43210</a></li></ul></div>
-      </div><div class="wrap copyright">Â© 2026 STACKLY. ALL RIGHTS RESERVED.</div>`;
+      <div><h5>Legal</h5><ul><li><a href="privacy.html">Privacy Policy</a></li><li><a href="terms.html">Terms &amp; Conditions</a></li></ul></div></div><div class="wrap copyright">© 2026 STACKLY. ALL RIGHTS RESERVED. &nbsp; | &nbsp; <a href="privacy.html">Privacy Policy</a> &nbsp; | &nbsp; <a href="terms.html">Terms &amp; Conditions</a></div>`;
   }
 
   // Use one identical public header on the four information pages.
@@ -178,3 +178,6 @@
     });
   }
 })();
+
+
+
