@@ -26,16 +26,29 @@ document.querySelectorAll('[data-dashboard-action]').forEach((button) => button.
     revenue: { title: 'Revenue', description: 'Recent revenue performance for the club.', source: '#revenue' },
     progress: { title: 'Progress', description: 'Your weekly training activity and plan.', source: '#progress' },
     classes: { title: 'Classes', description: 'Your upcoming classes and training sessions.', source: '#schedule' },
+    attendance: { title: 'Attendance', description: 'Check-ins and club attendance at a glance.', html: '<div class="card support-detail"><h2>Attendance summary</h2><p>186 member check-ins have been recorded today. Peak traffic is between 5:00 PM and 7:00 PM.</p><div class="progress-row"><div class="progress-meta"><span>Weekly attendance target</span><b>82%</b></div><div class="track"><div class="fill" style="width:82%"></div></div></div></div>' },
+    membership: { title: 'Membership', description: 'Your plan, renewal date and membership benefits.', html: '<div class="card support-detail"><h2>Peak plan</h2><p>Your membership is active and renews on 18 October. Your plan includes unlimited gym access, group classes and one monthly coach check-in.</p><div class="support-contact"><a href="services.html">Explore member benefits</a></div></div>' },
     support: { title: 'Support', description: 'Get help from the Stackly club team.', html: '<div class="card support-detail"><h2>How can we help?</h2><p>Our team can help with your membership, bookings, account, and club access.</p><div class="support-contact"><a href="404.html">Contact the club team</a><a href="404.html">hello@stackly.club</a><a href="404.html">+91 98765 43210</a></div></div>' }
   };
+
+  // Keep six useful destinations available in each dashboard workspace.
+  const extraModule = isAdmin ? 'attendance' : 'membership';
+  if (!nav.querySelector(`[href="#${extraModule}"]`)) {
+    const link = document.createElement('a');
+    link.href = `#${extraModule}`;
+    link.innerHTML = `<span class="nav-icon">${isAdmin ? '✓' : '★'}</span>${isAdmin ? 'Attendance' : 'Membership'}`;
+    nav.append(link);
+  }
 
   const keyFor = (link) => {
     const label = link.textContent.trim().toLowerCase();
     const target = link.getAttribute('href') || '';
     if (/dashboard|overview/.test(label)) return 'overview';
+    if (/membership/.test(label) || target === '#membership') return 'membership';
     if (/member/.test(label) || target === '#members') return 'members';
     if (/schedule/.test(label) || target === '#schedule') return 'schedule';
     if (/revenue/.test(label) || target === '#revenue') return 'revenue';
+    if (/attendance/.test(label) || target === '#attendance') return 'attendance';
     if (/progress|activity|training plan/.test(label) || target === '#progress') return 'progress';
     if (/class/.test(label)) return 'classes';
     if (/support|help/.test(label) || target === 'contact.html') return 'support';
@@ -94,20 +107,4 @@ document.querySelectorAll('[data-dashboard-action]').forEach((button) => button.
     showModule(key, nav.querySelector(`a[href="#${key}"]`) || null);
   });
 
-  // Dashboard navigation stays in this dashboard; unavailable destinations use the 404 page.
-  document.addEventListener('click', (event) => {
-    const link = event.target.closest('a[href]');
-    if (!link || event.defaultPrevented) return;
-    const destination = new URL(link.href, location.href);
-    if (destination.pathname === location.pathname && !destination.hash) return;
-    if (destination.hash && link.closest('.dash')) {
-      event.preventDefault();
-      location.href = '404.html';
-      return;
-    }
-    if (!destination.pathname.endsWith('/404.html') && !destination.pathname.endsWith('404.html')) {
-      event.preventDefault();
-      location.href = '404.html';
-    }
-  });
 })();
