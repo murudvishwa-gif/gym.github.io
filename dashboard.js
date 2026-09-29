@@ -1,3 +1,5 @@
+document.querySelectorAll('.dash-footer').forEach((footer) => footer.remove());
+
 document.querySelectorAll('[data-dashboard-action]').forEach((button) => button.addEventListener('click', () => {
   button.textContent = 'Saved';
   setTimeout(() => { button.textContent = button.dataset.dashboardAction; }, 1800);
@@ -50,14 +52,34 @@ document.querySelectorAll('[data-dashboard-action]').forEach((button) => button.
   };
 
   const extraDetails = {
-    members: [['New this week', '24 joined', 'New member sign-ups are up compared with last week.'], ['Plan mix', 'Peak is most popular', 'Review plan distribution when planning upcoming classes.'], ['Follow-ups', '12 renewals due', 'Contact members whose renewals are coming up.']],
-    schedule: [['Studio A', '2 places left', 'The evening HIIT session is close to capacity.'], ['Coach appointment', 'Monday  -  7:15 PM', 'Your next coach check-in is with Arjun.'], ['Bring along', 'Water and a towel', 'Arrive a few minutes before your session starts.']],
-    revenue: [['Memberships', 'INR 6.18L', 'Membership payments make up most of the current revenue.'], ['Personal training', 'INR 1.42L', 'Coaching bookings contributed to this month total.'], ['Class bookings', 'INR 82K', 'Group class bookings remain steady this week.']],
-    progress: [['Strength', '3 of 4 sessions', 'You are one strength session away from the weekly target.'], ['Cardio', '95 of 120 min', 'Add 25 minutes of cardio to meet your weekly plan.'], ['Recovery', '1 of 2 sessions', 'Schedule a recovery session to balance your training.']],
-    classes: [['Strength foundations', 'Today  -  6:30 PM', 'Studio A  -  Coach Arjun  -  Booking confirmed.'], ['Mobility reset', 'Saturday  -  9:00 AM', 'Recovery room  -  Bring comfortable movement clothes.'], ['Waitlist', '2 spots available', 'Check the booking list for newly available spaces.']],
-    attendance: [['Busiest hour', '6:00-7:00 PM', 'Plan front desk coverage for the evening rush.'], ['Morning check-ins', '54 members', 'Morning attendance is highest between 7:00 and 9:00 AM.'], ['Quiet period', '2:00-4:00 PM', 'Use this time for equipment checks and floor maintenance.']],
-    membership: [['Gym access', 'Unlimited', 'Visit during staffed hours at your home club.'], ['Group classes', 'Included', 'Book available classes through the schedule.'], ['Coach check-in', '1 per month', 'Use your monthly appointment to review your training plan.']],
-    support: [['Club hours', '6:00 AM-10:00 PM', 'The front desk team is available during regular club hours.'], ['Response time', 'Within one business day', 'Include your membership email when contacting support.'], ['Visit the team', 'Front desk', 'For urgent access issues, speak with staff at the club.']]
+    members: [['New this week', '24 joined', 'New member sign-ups are up compared with last week.'], ['Plan mix', 'Peak is most popular', 'Review plan distribution when planning upcoming classes.'], ['Follow-ups', '12 renewals due', 'Contact members whose renewals are coming up.'], ['Member satisfaction', '4.8 / 5', 'Recent feedback is positive across coaching and facilities.']],
+    schedule: [['Studio A', '2 places left', 'The evening HIIT session is close to capacity.'], ['Coach appointment', 'Monday  -  7:15 PM', 'Your next coach check-in is with Arjun.'], ['Bring along', 'Water and a towel', 'Arrive a few minutes before your session starts.'], ['Next available', 'Tomorrow  -  8:00 AM', 'A morning strength session has open spaces.']],
+    revenue: [['Memberships', 'INR 6.18L', 'Membership payments make up most of the current revenue.'], ['Personal training', 'INR 1.42L', 'Coaching bookings contributed to this month total.'], ['Class bookings', 'INR 82K', 'Group class bookings remain steady this week.'], ['Renewal outlook', '93% expected', 'Most upcoming renewals are on track this month.']],
+    progress: [['Strength', '3 of 4 sessions', 'You are one strength session away from the weekly target.'], ['Cardio', '95 of 120 min', 'Add 25 minutes of cardio to meet your weekly plan.'], ['Recovery', '1 of 2 sessions', 'Schedule a recovery session to balance your training.'], ['Personal best', '+8% this month', 'Your logged strength is trending upward.']],
+    classes: [['Strength foundations', 'Today  -  6:30 PM', 'Studio A  -  Coach Arjun  -  Booking confirmed.'], ['Mobility reset', 'Saturday  -  9:00 AM', 'Recovery room  -  Bring comfortable movement clothes.'], ['Waitlist', '2 spots available', 'Check the booking list for newly available spaces.'], ['Popular this week', 'HIIT circuit', 'Book early for the evening sessions.']],
+    attendance: [['Busiest hour', '6:00-7:00 PM', 'Plan front desk coverage for the evening rush.'], ['Morning check-ins', '54 members', 'Morning attendance is highest between 7:00 and 9:00 AM.'], ['Quiet period', '2:00-4:00 PM', 'Use this time for equipment checks and floor maintenance.'], ['Returning members', '78% this week', 'Repeat visits are steady compared with last week.']],
+    membership: [['Gym access', 'Unlimited', 'Visit during staffed hours at your home club.'], ['Group classes', 'Included', 'Book available classes through the schedule.'], ['Coach check-in', '1 per month', 'Use your monthly appointment to review your training plan.'], ['Member savings', '10% off gear', 'Show your active membership at the front desk.']],
+    support: [['Club hours', '6:00 AM-10:00 PM', 'The front desk team is available during regular club hours.'], ['Response time', 'Within one business day', 'Include your membership email when contacting support.'], ['Visit the team', 'Front desk', 'For urgent access issues, speak with staff at the club.'], ['Account help', 'Profile and billing', 'Have your membership email ready for faster assistance.']]
+  };
+
+  const appendModuleCharts = (container, key) => {
+    const chartNames = {
+      members: ['Member growth', 'Membership mix'], schedule: ['Class bookings', 'Weekly capacity'],
+      revenue: ['Daily revenue', 'Revenue sources'], progress: ['Weekly activity', 'Training balance'],
+      classes: ['Class attendance', 'Weekly availability'], attendance: ['Daily check-ins', 'Visit patterns'],
+      membership: ['Training consistency', 'Plan benefits'], support: ['Support topics', 'Response progress']
+    }[key] || ['Weekly activity', 'Progress breakdown'];
+    const values = key === 'revenue' ? [38, 54, 47, 72, 63, 88, 76] : [42, 68, 51, 84, 63, 92, 70];
+    const chartBars = values.map((value, index) => `<div class="trend-column"><i class="trend-bar" style="--bar-height:${value}%"></i><span>${['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'][index]}</span></div>`).join('');
+    const chart = document.createElement('article');
+    chart.className = 'card module-chart-card';
+    chart.innerHTML = `<div class="card-top"><h2>${chartNames[0]}</h2><span class="trend-period">Last 7 days</span></div><div class="trend-chart" role="img" aria-label="${chartNames[0]} for the last seven days">${chartBars}</div>`;
+    container.append(chart);
+
+    const breakdown = document.createElement('article');
+    breakdown.className = 'card module-chart-card';
+    breakdown.innerHTML = `<div class="card-top"><h2>${chartNames[1]}</h2><span class="trend-period">This week</span></div><div class="progress-row"><div class="progress-meta"><span>Primary target</span><b>78%</b></div><div class="track"><div class="fill" style="width:78%"></div></div></div><div class="progress-row"><div class="progress-meta"><span>Weekly average</span><b>64%</b></div><div class="track"><div class="fill" style="width:64%;background:#3874ff"></div></div></div><div class="progress-row"><div class="progress-meta"><span>Previous week</span><b>52%</b></div><div class="track"><div class="fill" style="width:52%;background:#ff8e42"></div></div></div>`;
+    container.append(breakdown);
   };
 
   // Keep six useful destinations available in each dashboard workspace.
@@ -130,6 +152,7 @@ document.querySelectorAll('[data-dashboard-action]').forEach((button) => button.
         card.innerHTML = `<h2>${titleText}</h2><div class="metric">${metricText}</div><p>${bodyText}</p>`;
         view.append(card);
       });
+      appendModuleCharts(view, key);
     } else view.classList.remove('dashboard-module-layout');
     nav.querySelectorAll('a').forEach((link) => {
       const active = link === selectedLink || (key === 'overview' && /dashboard|overview/i.test(link.textContent));
