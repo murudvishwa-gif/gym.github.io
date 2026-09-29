@@ -106,7 +106,7 @@
       const links = document.createElement('div');
       links.className = 'socials';
       links.setAttribute('aria-label', 'Stackly social media');
-      links.innerHTML = '<a href="404.html" aria-label="Facebook">f</a><a href="404.html" aria-label="Instagram">◎</a><a href="404.html" aria-label="X">𝕏</a><a href="404.html" aria-label="YouTube">▶</a>';
+      links.innerHTML = '<a href="404.html" aria-label="Facebook">FB</a><a href="404.html" aria-label="Instagram">IG</a><a href="404.html" aria-label="X">X</a><a href="404.html" aria-label="YouTube">YT</a>';
       footer.querySelector('.footergrid > div')?.append(links);
     }
   });
@@ -167,14 +167,30 @@
   const pageLinks = pageNav?.querySelector('.links, .navlinks');
   if (pageNav && pageLinks) {
     const menu = document.createElement('button');
-    menu.className = 'site-menu-toggle'; menu.type = 'button'; menu.textContent = '☰';
+    menu.className = 'site-menu-toggle'; menu.type = 'button'; menu.innerHTML = '<span></span><span></span><span></span><small>MENU</small>';
     menu.setAttribute('aria-label', 'Open navigation'); menu.setAttribute('aria-expanded', 'false');
     pageNav.append(menu);
-    menu.addEventListener('click', () => {
-      const open = menu.getAttribute('aria-expanded') !== 'true';
+    const auth = document.createElement('div');
+    auth.className = 'mobile-menu-auth';
+    auth.innerHTML = '<a class="mobile-login" href="login.html">Login</a><a class="mobile-signup" href="signup.html">Sign up</a>';
+    const menuIntro = document.createElement('div');
+    menuIntro.className = 'mobile-menu-intro';
+    menuIntro.innerHTML = '<span>STACKLY</span><small>TRAIN WITH PURPOSE</small>';
+    pageLinks.prepend(menuIntro);
+    pageLinks.append(auth);
+
+    const setMenuOpen = (open) => {
       menu.setAttribute('aria-expanded', String(open));
       menu.setAttribute('aria-label', open ? 'Close navigation' : 'Open navigation');
       pageLinks.classList.toggle('mobile-open', open);
+      document.body.classList.toggle('site-menu-open', open);
+    };
+    menu.addEventListener('click', () => setMenuOpen(menu.getAttribute('aria-expanded') !== 'true'));
+    pageLinks.addEventListener('click', (event) => {
+      if (event.target.closest('a')) setMenuOpen(false);
+    });
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') setMenuOpen(false);
     });
   }
 })();
