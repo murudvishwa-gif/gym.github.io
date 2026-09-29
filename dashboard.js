@@ -14,6 +14,13 @@ document.querySelectorAll('[data-dashboard-action]').forEach((button) => button.
   const overviewText = heading.querySelector('p')?.textContent || '';
   const stats = content.querySelector('.stats');
   const dashboardGrid = content.querySelector('.dash-grid');
+  const overviewPanel = document.createElement('section');
+  overviewPanel.className = 'dashboard-chart-panel';
+  const chartValues = isAdmin ? [48, 63, 56, 72, 65, 88, 76] : [42, 68, 51, 84, 63, 92, 70];
+  const chartTitle = isAdmin ? 'Daily check-ins' : 'Training activity';
+  const chartBars = chartValues.map((value, index) => `<div class="trend-column"><i class="trend-bar" style="--bar-height:${value}%"></i><span>${['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'][index]}</span></div>`).join('');
+  overviewPanel.innerHTML = `<article class="card trend-card"><div class="card-top"><h2>${chartTitle}</h2><span class="trend-period">Last 7 days</span></div><div class="trend-chart" role="img" aria-label="${chartTitle} over the last seven days">${chartBars}</div></article>`;
+  if (dashboardGrid) dashboardGrid.after(overviewPanel);
   const view = document.createElement('section');
   view.className = 'dashboard-module-view';
   view.hidden = true;
@@ -85,6 +92,7 @@ document.querySelectorAll('[data-dashboard-action]').forEach((button) => button.
     if (title) title.textContent = module.title;
     if (description) description.textContent = module.description;
     const isOverview = key === 'overview';
+    overviewPanel.hidden = !isOverview;
     if (stats) stats.hidden = !isOverview;
     if (dashboardGrid) dashboardGrid.hidden = !isOverview;
     const gallery = content.querySelector('.club-gallery');
@@ -163,6 +171,12 @@ document.querySelectorAll('[data-dashboard-action]').forEach((button) => button.
   menuIntro.className = 'dashboard-menu-intro';
   menuIntro.innerHTML = '<span>STACKLY</span><small>TRAIN WITH PURPOSE</small>';
   nav.before(menuIntro);
+
+  const signOut = document.createElement('a');
+  signOut.className = 'dashboard-signout';
+  signOut.href = 'login.html';
+  signOut.textContent = 'Sign out';
+  nav.after(signOut);
 
   const closeButton = document.createElement('button');
   closeButton.type = 'button';

@@ -32,7 +32,7 @@
     }
   }
 
-  if (/^\/$|index|about|services|blog|contact/.test(location.pathname)) {
+  if (/^\/$|index|about|services|blog|contact|login|signup/.test(location.pathname)) {
     const footer = document.querySelector('body > footer');
     if (footer) footer.innerHTML = `
       <div class="wrap footergrid">
@@ -47,8 +47,8 @@
         </div>
         <div><h5>Explore</h5><ul><li><a href="index.html">Home</a></li><li><a href="about.html">About Us</a></li><li><a href="services.html">Services</a></li><li><a href="blog.html">Blog</a></li><li><a href="contact.html">Contact</a></li></ul></div>
         <div><h5>The Club</h5><ul><li><a href="404.html">Memberships</a></li><li><a href="services.html">Personal Training</a></li><li><a href="services.html">Classes</a></li><li><a href="contact.html">Find a Location</a></li></ul></div>
-        <div><h5>Need help?</h5><ul><li><a href="contact.html">Contact Us</a></li><li><a href="404.html">Shipping &amp; Returns</a></li><li><a href="contact.html">FAQ</a></li><li><a href="tel:+919876543210">Call +91 98765 43210</a></li></ul></div>
-      <div><h5>Legal</h5><ul><li><a href="privacy.html">Privacy Policy</a></li><li><a href="terms.html">Terms &amp; Conditions</a></li></ul></div></div><div class="wrap copyright">© 2026 STACKLY. ALL RIGHTS RESERVED. &nbsp; | &nbsp; <a href="privacy.html">Privacy Policy</a> &nbsp; | &nbsp; <a href="terms.html">Terms &amp; Conditions</a></div>`;
+        <div><h5>Need help?</h5><ul><li><a href="contact.html">Contact Us</a></li><li><a href="404.html">Shipping &amp; Returns</a></li><li><a href="contact.html">FAQ</a></li><li><a href="404.html">Call +91 98765 43210</a></li></ul></div>
+      <div><h5>Legal</h5><ul><li><a href="404.html">Privacy Policy</a></li><li><a href="404.html">Terms &amp; Conditions</a></li></ul></div></div><div class="wrap copyright">Â© 2026 STACKLY. ALL RIGHTS RESERVED. &nbsp; | &nbsp; <a href="404.html">Privacy Policy</a> &nbsp; | &nbsp; <a href="404.html">Terms &amp; Conditions</a></div>`;
   }
 
   // Use one identical public header on the four information pages.
@@ -76,6 +76,7 @@
 
   // Inert placeholder links and controls all lead to the site's 404 page.
   document.querySelectorAll('a[href="#"]').forEach((link) => { link.href = missing; });
+  document.querySelectorAll('a.btn[href^="#"], a.button[href^="#"]').forEach((link) => { link.href = missing; });
   document.querySelectorAll('.socials a, a[aria-label^="Facebook"], a[aria-label^="Instagram"], a[aria-label="X"], a[aria-label^="YouTube"]').forEach((link) => { link.href = missing; });
   document.querySelectorAll('[data-dashboard-action], .quick').forEach((control) => {
     if (control.tagName === 'A') control.href = missing;
@@ -95,7 +96,7 @@
       grid.innerHTML = '<div><a class="logo" href="index.html" aria-label="Stackly home"><img src="assets/logo-dark.webp" alt="Stackly"></a><p>Move with purpose. Build strength. Feel your best.</p></div><div><h4>Explore</h4><ul><li><a href="about.html">About Us</a></li><li><a href="services.html">Services</a></li><li><a href="blog.html">Blog</a></li></ul></div><div><h4>Visit</h4><ul><li><a href="contact.html">Contact Us</a></li><li><a href="404.html">Memberships</a></li></ul></div>';
       footer.prepend(grid);
     }
-    const destinations = { 'About Us': 'about.html', Services: 'services.html', Blog: 'blog.html', 'Contact Us': 'contact.html', 'Find a Club': 'contact.html', 'Memberships': '404.html', 'Personal Training': 'services.html', Classes: 'services.html', 'Supplements': '404.html', 'Training Gear': '404.html', Activewear: '404.html', Recovery: 'services.html', FAQ: 'contact.html', 'Shipping & Returns': '404.html' };
+    const destinations = { 'About Us': 'about.html', Services: 'services.html', Blog: 'blog.html', 'Contact Us': 'contact.html', 'Find a Club': 'contact.html', Memberships: '404.html', 'Personal Training': 'services.html', Classes: 'services.html', Supplements: '404.html', 'Training Gear': '404.html', Activewear: '404.html', Recovery: 'services.html', FAQ: 'contact.html', 'Shipping & Returns': '404.html', 'Privacy Policy': '404.html', 'Terms & Conditions': '404.html', 'Call +91 98765 43210': '404.html' };
     footer.querySelectorAll('li').forEach((item) => {
       if (item.querySelector('a')) return;
       const label = item.textContent.trim();
@@ -150,15 +151,45 @@
     revealItems.forEach((item) => { item.classList.add('reveal'); observer.observe(item); });
   } else revealItems.forEach((item) => item.classList.add('is-visible'));
 
+  const contactForm = document.querySelector('#contact-form form');
+  if (contactForm) {
+    contactForm.noValidate = true;
+    contactForm.querySelectorAll('input, select, textarea').forEach((field) => { field.required = true; });
+    const topic = contactForm.querySelector('select');
+    if (topic?.options[0]) { topic.options[0].value = ''; topic.options[0].disabled = true; }
+  }
+
   document.querySelectorAll('form').forEach((form) => form.addEventListener('submit', (event) => {
     event.preventDefault();
+    if (location.pathname.endsWith('contact.html') && form.closest('#contact-form')) {
+      const fields = [...form.querySelectorAll('input, select, textarea')];
+      let message = form.querySelector('.form-message');
+      if (!message) {
+        message = document.createElement('p');
+        message.className = 'form-message';
+        message.setAttribute('role', 'alert');
+        form.prepend(message);
+      }
+      const missing = fields.some((field) => !field.value.trim() || (field.tagName === 'SELECT' && field.selectedIndex === 0));
+      if (missing) { message.textContent = 'Please fill in all fields'; return; }
+      const phone = form.querySelector('input[type="tel"]');
+      if (phone && (!/^\+?[0-9()\s-]+$/.test(phone.value.trim()) || phone.value.replace(/\D/g, '').length < 7)) {
+        phone.setCustomValidity('Enter a valid phone number');
+        form.reportValidity();
+        phone.setCustomValidity('');
+        return;
+      }
+      if (!form.reportValidity()) return;
+      location.href = '404.html';
+      return;
+    }
     if (!form.reportValidity()) return;
     if (location.pathname.endsWith('login.html')) {
       const role = form.querySelector('[name="role"]:checked')?.value || 'user';
       const email = form.querySelector('input[type="email"]')?.value.trim().toLowerCase() || '';
       try { if (email) localStorage.setItem('stacklyLoginEmail', email); } catch {}
       location.href = role === 'admin' ? 'admin-dashboard.html' : 'user-dashboard.html';
-    }
+    } else if (location.pathname.endsWith('signup.html')) location.href = 'login.html';
     else { alert('Thanks! Your details have been received.'); form.reset(); }
   }));
   document.querySelectorAll('form button[type="button"]').forEach((button) => { button.type = 'submit'; });
@@ -173,10 +204,6 @@
     const auth = document.createElement('div');
     auth.className = 'mobile-menu-auth';
     auth.innerHTML = '<a class="mobile-login" href="login.html">Login</a><a class="mobile-signup" href="signup.html">Sign up</a>';
-    const menuIntro = document.createElement('div');
-    menuIntro.className = 'mobile-menu-intro';
-    menuIntro.innerHTML = '<span>STACKLY</span><small>TRAIN WITH PURPOSE</small>';
-    pageLinks.prepend(menuIntro);
     pageLinks.append(auth);
 
     const setMenuOpen = (open) => {

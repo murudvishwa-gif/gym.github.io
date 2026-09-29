@@ -25,6 +25,16 @@ html{scroll-behavior:smooth;scroll-padding-top:90px}.topnav{position:sticky;top:
 .dashboard-module-layout:not([hidden]){display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}.dashboard-module-layout>.card:first-child{grid-column:1/-1}.module-detail-card h2{font:800 16px 'Manrope';margin:0}.module-detail-card .metric{font-size:23px;margin:15px 0 7px}.module-detail-card p{color:var(--muted);line-height:1.65;margin:0}@media(max-width:720px){.dashboard-module-layout:not([hidden]){grid-template-columns:1fr;gap:12px}.dashboard-module-layout>.card:first-child{grid-column:auto}}
 
 .mobile-menu-toggle,.mobile-menu-close,.dashboard-menu-close{display:none}
+.dashboard-signout{display:none}
+.topnav{position:sticky;top:0;z-index:40}
+.dashboard-chart-panel{margin-top:18px}
+.dashboard-chart-panel[hidden]{display:none!important}
+.trend-card{padding:20px}
+.trend-card .card-top{margin-bottom:14px}
+.trend-period{color:var(--muted);font-size:11px}
+.trend-chart{height:170px;display:grid;grid-template-columns:repeat(7,minmax(0,1fr));align-items:end;gap:clamp(8px,2vw,20px);padding:10px 4px 0;background:repeating-linear-gradient(to bottom,transparent 0,transparent 37px,#e7eaf0 38px)}
+.trend-column{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:7px;color:var(--muted);font-size:10px}
+.trend-bar{display:block;width:min(100%,46px);height:var(--bar-height);min-height:5px;background:#8fbe2b;border-radius:4px 4px 0 0}
 html{overflow-x:hidden}
 body{overflow-x:hidden}
 .dash,.main,.content,.topnav,.card{min-width:0}
@@ -42,6 +52,7 @@ body{overflow-x:hidden}
   body.mobile-menu-open{overflow:hidden}
   .sidebar.is-open{display:flex!important;flex-direction:column}
   .sidebar.is-open .dash-brand,.sidebar.is-open .workspace{display:none!important}
+  .sidebar.is-open .account{display:none!important}
   .sidebar.is-open .dashboard-menu-close{display:grid;place-items:center;position:fixed;top:14px;right:20px;z-index:103;width:46px;height:46px;border:1px solid #57614f;border-radius:50%;background:#1c241b;color:var(--lime);font:700 16px 'DM Sans';cursor:pointer}
   .dashboard-menu-intro{display:none}
   .sidebar.is-open .dashboard-menu-intro{display:grid;gap:5px;margin:clamp(30px,8vh,72px) 12px clamp(22px,6vh,48px);color:#fff}
@@ -53,8 +64,9 @@ body{overflow-x:hidden}
   .sidebar .side-nav .nav-icon{display:none}
   .sidebar .side-nav a:hover,.sidebar .side-nav a.active{padding-left:12px;background:transparent;color:var(--lime)}
   .sidebar .side-nav a:hover,.sidebar .side-nav a.active{background:rgba(182,233,54,.1);color:#fff}
+  .sidebar.is-open .dashboard-signout{display:block;margin:clamp(20px,5vh,40px) 4px 20px;padding:16px 4px;border-top:1px solid #343b46;color:var(--lime);font-size:15px;font-weight:700;text-decoration:none;text-transform:uppercase}
 }
-@media(max-width:720px){.table{display:block;width:100%;overflow-x:auto;white-space:nowrap}.heading>div{min-width:0}.heading>.btn{flex:0 0 auto}.chart{max-width:100%}}
+@media(max-width:720px){.table{display:block;width:100%;overflow-x:auto;white-space:nowrap}.heading>div{min-width:0}.heading>.btn{flex:0 0 auto}.chart{max-width:100%}.trend-chart{height:140px;gap:6px}.trend-card{padding:15px}}
 @keyframes dashboardMenuIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 
 .card,.event,.notice,.support-detail{transition:transform .22s ease,box-shadow .22s ease,border-color .22s ease}@media(hover:hover){.card:hover,.event:hover,.notice:hover,.support-detail:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(20,30,40,.12);border-color:#b6e936}}@media(hover:none){.card:active,.event:active,.notice:active,.support-detail:active{transform:scale(.99)}}@media(prefers-reduced-motion:reduce){.card,.event,.notice,.support-detail{transition:none}}
