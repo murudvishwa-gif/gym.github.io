@@ -1,0 +1,106 @@
+/* Shared layout safeguards and viewport-specific layouts for every page. */
+*,*::before,*::after{box-sizing:border-box}
+html{width:100%;max-width:100%;overflow-x:hidden!important;overscroll-behavior-x:none}
+body{position:relative;width:100%;max-width:100%;min-width:0;overflow-x:hidden!important;overscroll-behavior-x:none}
+body>header,body>nav,body>main,body>section,body>footer,body>.top,body>.topbar{max-width:100%;}
+img,video,iframe{max-width:100%}
+.wrap,.content{min-width:0}
+.wrap{width:100%}
+main,section,header,footer,article,form{min-width:0}
+.grid,.grid.two,.footergrid,.form,.hero-grid,.category-grid,.product-grid,.deal-products,.deals-layout,.split-promos,.benefits,.brands{min-width:0}
+.grid>* ,.footergrid>* ,.hero-grid>* ,.category-grid>* ,.product-grid>* ,.deal-products>* ,.deals-layout>* ,.split-promos>* ,.benefits>*{min-width:0}
+button,input,select,textarea{max-width:100%;font:inherit}
+table{max-width:100%}
+
+/* Home page */
+.hero-grid{grid-template-columns:minmax(0,1fr) 275px}
+.hero-grid>.hero,.sidepromos,.feature-deal{min-width:0}
+.hero h1{font-size:clamp(42px,5.8vw,72px);line-height:.92;overflow-wrap:anywhere}
+.membership{background-position:right center;background-size:50% 100%;padding-right:54%}
+.product-grid,.deal-products{grid-template-columns:repeat(4,minmax(0,1fr))}
+.deal-products{grid-template-columns:repeat(3,minmax(0,1fr))}
+.footergrid{grid-template-columns:minmax(0,2fr) repeat(3,minmax(0,1fr))}
+
+/* Public information pages and forms */
+.hero .wrap{min-width:0}
+.hero h1{font-size:clamp(42px,7vw,62px);line-height:.95}
+.quote{padding:clamp(24px,5vw,56px)}
+.quote p{font-size:clamp(24px,4vw,31px)}
+.image,.map{width:100%;min-width:0}
+.form textarea{grid-column:1/-1}
+.auth-main{width:100%;min-width:0}
+.auth-card{min-width:0}
+
+@media(max-width:1100px){
+  .hero-grid{grid-template-columns:minmax(0,1fr)}
+  .sidepromos{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .sidepromos .promo{min-height:160px}
+  .category-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .product-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .membership{padding:40px 53% 40px 35px}
+}
+@media(max-width:760px){
+  .wrap{padding-inline:18px}
+  .top .wrap{flex-wrap:wrap}
+  .section{padding-block:42px}
+  .hero{min-height:350px}
+  .hero h1{font-size:clamp(40px,10vw,56px)}
+  .hero p{font-size:14px}
+  .section-title{align-items:flex-start;gap:12px;flex-wrap:wrap}
+  .section-title h2{font-size:clamp(28px,8vw,36px)}
+  .sidepromos{grid-template-columns:1fr 1fr}
+  .benefits{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .benefit{border-bottom:1px solid var(--line)}
+  .benefit:nth-child(2){border-right:0}
+  .benefit:nth-last-child(-n+2){border-bottom:0}
+  .split-promos{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .category-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+  .product-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+  .product-img,.deal-products .product-img{height:clamp(145px,42vw,230px)}
+  .deals-layout{grid-template-columns:1fr;gap:16px}
+  .feature-deal{min-height:300px}
+  .deal-products{grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+  .deal-products .product h4{font-size:12px}
+  .membership{background:#c5f339;padding:32px 26px;min-height:0}
+  .membership h2{font-size:clamp(34px,9vw,45px)}
+  .dealbar .wrap{flex-wrap:wrap;align-items:flex-start}
+  .timer{margin-left:0}
+  .dealbar .button{margin-left:0}
+  .brands{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .brand{height:68px;font-size:20px}
+  .brand:nth-child(3){border-right:0}
+  .brand:nth-child(n+4){border-top:1px solid var(--line)}
+  .club-strip .wrap{align-items:flex-start;flex-direction:column}
+  footer .footergrid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:24px 16px}
+  footer .footer-brand{grid-column:1/-1}
+  .auth-main{padding:30px 16px}
+  .table{display:block;overflow-x:auto}
+}
+@media(max-width:480px){
+  .wrap{padding-inline:14px}
+  .top .wrap{justify-content:center;text-align:center}
+  body>nav .wrap{gap:10px}
+  body>nav .logo{width:130px;flex-basis:130px}
+  .hero{min-height:330px;padding:38px 20px}
+  .hero .dots{left:20px;bottom:18px}
+  .slide-arrows{right:14px;bottom:12px}
+  .sidepromos{grid-template-columns:1fr}
+  .sidepromos .promo{min-height:135px}
+  .category-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .category img{height:120px}
+  .split-promos{grid-template-columns:1fr}
+  .wide-promo{min-height:170px}
+  .deal-products{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .benefits{grid-template-columns:1fr}
+  .benefit,.benefit:nth-child(2){border-right:0;border-bottom:1px solid var(--line)}
+  .benefit:last-child{border-bottom:0}
+  .brands{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .brand:nth-child(3){border-right:1px solid var(--line)}
+  .brand:nth-child(even){border-right:0}
+  .brand:nth-child(n+3){border-top:1px solid var(--line)}
+  .time{padding:7px 8px;font-size:16px}
+  .form-options{align-items:flex-start;flex-direction:column}
+  .role-picker label{width:calc(50% - 5px)}
+  .auth-card{padding:23px 17px}
+}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}

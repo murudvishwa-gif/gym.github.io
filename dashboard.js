@@ -1,8 +1,10 @@
 document.querySelectorAll('.dash-footer').forEach((footer) => footer.remove());
 
 document.querySelectorAll('[data-dashboard-action]').forEach((button) => button.addEventListener('click', () => {
-  button.textContent = 'Saved';
-  setTimeout(() => { button.textContent = button.dataset.dashboardAction; }, 1800);
+  const current = new URL(location.href);
+  current.searchParams.set('section', document.querySelector('.side-nav a.active')?.getAttribute('href')?.slice(1) || 'overview');
+  sessionStorage.setItem('dashboard-return', current.pathname + current.search);
+  location.href = '404.html?from=dashboard';
 }));
 
 (() => {
@@ -36,7 +38,7 @@ document.querySelectorAll('[data-dashboard-action]').forEach((button) => button.
     progress: { title: 'Progress', description: 'Your weekly training activity and plan.', source: '#progress' },
     classes: { title: 'Classes', description: 'Your upcoming classes and training sessions.', source: '#schedule' },
     attendance: { title: 'Attendance', description: 'Check-ins and club attendance at a glance.', html: '<div class="card support-detail"><h2>Attendance summary</h2><p>186 member check-ins have been recorded today. Peak traffic is between 5:00 PM and 7:00 PM.</p><div class="progress-row"><div class="progress-meta"><span>Weekly attendance target</span><b>82%</b></div><div class="track"><div class="fill" style="width:82%"></div></div></div></div>' },
-    membership: { title: 'Membership', description: 'Your plan, renewal date and membership benefits.', html: '<div class="card support-detail"><h2>Peak plan</h2><p>Your membership is active and renews on 18 October. Your plan includes unlimited gym access, group classes and one monthly coach check-in.</p><div class="support-contact"><a href="services.html">Explore member benefits</a></div></div>' },
+    membership: { title: 'Membership', description: 'Your plan, renewal date and membership benefits.', html: '<div class="card support-detail"><h2>Peak plan</h2><p>Your membership is active and renews on 18 October. Your plan includes unlimited gym access, group classes and one monthly coach check-in.</p><div class="support-contact"><a href="404.html">Explore member benefits</a></div></div>' },
     support: { title: 'Support', description: 'Get help from the Stackly club team.', html: '<div class="card support-detail"><h2>How can we help?</h2><p>Our team can help with your membership, bookings, account, and club access.</p><div class="support-contact"><a href="404.html">Contact the club team</a><a href="404.html">hello@stackly.club</a><a href="404.html">+91 98765 43210</a></div></div>' }
   };
 
@@ -160,7 +162,14 @@ document.querySelectorAll('[data-dashboard-action]').forEach((button) => button.
       if (active) link.setAttribute('aria-current', 'page');
       else link.removeAttribute('aria-current');
     });
+    const url = new URL(location.href);
+    if (key === 'overview') url.searchParams.delete('section');
+    else url.searchParams.set('section', key);
+    history.replaceState({ dashboardSection: key }, '', url.pathname + url.search);
   };
+
+  const initialSection = new URLSearchParams(location.search).get('section');
+  if (initialSection && modules[initialSection]) showModule(initialSection, nav.querySelector(`[href="#${initialSection}"]`));
 
   nav.addEventListener('click', (event) => {
     const link = event.target.closest('a');

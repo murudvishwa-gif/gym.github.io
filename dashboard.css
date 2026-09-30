@@ -69,6 +69,26 @@ body{overflow-x:hidden}
 @media(max-width:720px){.table{display:block;width:100%;overflow-x:auto;white-space:nowrap}.heading>div{min-width:0}.heading>.btn{flex:0 0 auto}.chart{max-width:100%}.trend-chart{height:140px;gap:6px}.trend-card{padding:15px}}
 @keyframes dashboardMenuIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 
+/* Keep dashboard controls and content within the viewport at every width. */
+.dash-brand{width:max-content;max-width:100%;color:#fff!important;font:800 22px 'Manrope'!important;letter-spacing:1.5px!important;text-decoration:none;white-space:nowrap}
+.dash-brand:before{content:none!important}
+.content{width:100%;max-width:1510px;margin-inline:auto}
+.stats,.dash-grid,.dashboard-module-layout{min-width:0}
+.stats>.card,.dash-grid>.card,.dashboard-module-layout>.card{min-width:0}
+.metric,.progress-meta,.card-top{min-width:0;overflow-wrap:anywhere}
+.chart,.trend-chart{min-width:0;max-width:100%}
+@media(max-width:720px){
+  .topnav{width:100%;padding-inline:12px;gap:9px}
+  .crumb{font-size:12px}
+  .content{padding:20px 12px}
+  .heading{flex-wrap:wrap;align-items:center}
+  .heading>.btn{white-space:nowrap}
+  .stats{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+  .stats .card{padding:13px 11px}
+  .stats .metric{font-size:clamp(20px,6vw,27px)}
+  .card-top{gap:8px;flex-wrap:wrap}
+}
+
 .card,.event,.notice,.support-detail{transition:transform .22s ease,box-shadow .22s ease,border-color .22s ease}@media(hover:hover){.card:hover,.event:hover,.notice:hover,.support-detail:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(20,30,40,.12);border-color:#b6e936}}@media(hover:none){.card:active,.event:active,.notice:active,.support-detail:active{transform:scale(.99)}}@media(prefers-reduced-motion:reduce){.card,.event,.notice,.support-detail{transition:none}}
 
 /* Keep dashboard navigation fixed while the workspace scrolls independently. */
