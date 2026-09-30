@@ -209,11 +209,6 @@ document.querySelectorAll('[data-dashboard-action]').forEach((button) => button.
     topnav.insertBefore(mobileBrand, topnav.querySelector('.crumb'));
   }
 
-  const menuIntro = document.createElement('div');
-  menuIntro.className = 'dashboard-menu-intro';
-  menuIntro.innerHTML = `<a class="dashboard-menu-home" href="${location.pathname}" aria-label="Stackly logo - dashboard overview"><img src="assets/logo-dark.webp" alt="Stackly"></a>`;
-  nav.before(menuIntro);
-
   const signOut = document.createElement('a');
   signOut.className = 'dashboard-signout';
   signOut.href = 'login.html';

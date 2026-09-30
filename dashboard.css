@@ -56,13 +56,7 @@ body{overflow-x:hidden}
   .sidebar.is-open .dash-brand,.sidebar.is-open .workspace{display:none!important}
   .sidebar.is-open .account{display:none!important}
   .sidebar.is-open .dashboard-menu-close{display:grid;place-items:center;position:fixed;top:14px;right:20px;z-index:103;width:46px;height:46px;border:1px solid #57614f;border-radius:50%;background:#1c241b;color:var(--lime);font:700 16px 'DM Sans';cursor:pointer}
-  .dashboard-menu-intro{display:none}
-  .sidebar.is-open .dashboard-menu-intro{display:grid;gap:5px;margin:clamp(30px,8vh,72px) 12px clamp(22px,6vh,48px);color:#fff}
-  .sidebar.is-open .dashboard-menu-home{display:flex;width:min(240px,72vw);min-height:72px;align-items:center;padding:10px 0;border-radius:0;background:transparent}
-  .sidebar.is-open .dashboard-menu-home img{display:block;width:100%;height:auto;max-height:52px;object-fit:contain;object-position:left center}
   .sidebar.is-open{animation:dashboardMenuIn .32s ease-out both}
-  .dashboard-menu-intro span{font:800 26px 'Manrope';letter-spacing:2px}
-  .dashboard-menu-intro small{color:var(--lime);font-size:10px;font-weight:700;letter-spacing:2.1px}
   .sidebar .side-nav{display:grid;grid-template-columns:1fr;gap:0;margin-top:0}
   .sidebar .side-nav a{padding:clamp(13px,2.5vh,23px) 4px;border-bottom:1px solid #343b46;border-radius:0;font-size:clamp(19px,4vw,27px);letter-spacing:.3px;text-transform:uppercase;transition:color .18s,padding-left .18s}
   .sidebar .side-nav .nav-icon{display:none}
