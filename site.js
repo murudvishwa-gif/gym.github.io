@@ -4,10 +4,10 @@
   // Keep the required Stackly identity consistent, including legacy page markup.
   document.querySelectorAll('.logo, .dash-brand').forEach((logo) => {
     logo.href = /dashboard/.test(location.pathname) ? location.pathname : 'index.html';
-    logo.setAttribute('aria-label', 'Stackly home');
+    logo.setAttribute('aria-label', logo.dataset.homeLabel || logo.getAttribute('aria-label') || 'Stackly home');
     const image = document.createElement('img');
     image.src = 'assets/logo-dark.webp';
-    image.alt = 'Stackly';
+    image.alt = 'Stackly logo';
     logo.replaceChildren(image);
   });
   document.querySelectorAll('title').forEach((title) => { title.textContent = title.textContent.replace(/IRONCORE/gi, 'Stackly'); });
